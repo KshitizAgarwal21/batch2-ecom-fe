@@ -39,7 +39,7 @@ export default function Home() {
     <div>
       <header>
         <img src={logo} className="app-logo" />
-        <div>Hello, Select your address</div>
+        <div style={{ color: "#fff" }}>Hello, Select your address</div>
 
         <input type="text" className="search" />
         <select>

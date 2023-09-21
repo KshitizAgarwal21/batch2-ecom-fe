@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import logo from "../../../src/logo.svg";
 import cart from "../../cart.jpg";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import product from "../../product/product.jpg";
+import addon from "../../product/addon.jpg";
 import style2 from "../../product/style2.jpg";
 import style3 from "../../product/style3.jpg";
 import p2 from "../../product/p2.jpg";
@@ -20,7 +26,7 @@ export default function Product() {
     <div>
       <header style={{ position: "static" }}>
         <img src={logo} className="app-logo" />
-        <div>Hello, Select your address</div>
+        <div style={{ color: "#fff" }}>Hello, Select your address</div>
 
         <input type="text" className="search" />
         <select>
@@ -223,8 +229,139 @@ export default function Product() {
                 </ul>
               </div>
             </div>
+            <p style={{ fontWeight: "700" }}>Purchase options and add-ons</p>
+            <hr></hr>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>
+                  Accessories
+                  <p style={{ fontSize: "12px", color: "grey" }}>
+                    Accessories and add-ons
+                  </p>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  <div className="add-ons">
+                    <div className="add-on">
+                      <img src={addon} height="90" width="90" />
+                      <p>Title of Product</p>
+                    </div>
+                    <div className="add-on">
+                      <img src={addon} height="90" width="90" />
+                      <p>Title of Product</p>
+                    </div>
+                    <div className="add-on">
+                      <img src={addon} height="90" width="90" />
+                      <p>Title of Product</p>
+                    </div>
+                    <div className="add-on">
+                      <img src={addon} height="90" width="90" />
+                      <p>Title of Product</p>
+                    </div>
+                    <div className="add-on">
+                      <img src={addon} height="90" width="90" />
+                      <p>Title of Product</p>
+                    </div>
+                  </div>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <hr></hr>
+            <div>
+              <p style={{ fontWeight: "700" }}>
+                Bike Type{" "}
+                <span style={{ marginLeft: "50px", fontWeight: "normal" }}>
+                  Kids Bike
+                </span>
+              </p>
+              <p style={{ fontWeight: "700" }}>
+                Bike Type{" "}
+                <span style={{ marginLeft: "50px", fontWeight: "normal" }}>
+                  Kids Bike
+                </span>
+              </p>
+              <p style={{ fontWeight: "700" }}>
+                Bike Type{" "}
+                <span style={{ marginLeft: "50px", fontWeight: "normal" }}>
+                  Kids Bike
+                </span>
+              </p>
+            </div>
+            <hr></hr>
+            <div>
+              <p style={{ fontWeight: "700" }}>About this item</p>
+              <ul>
+                <li>
+                  Lifelong Cycle Tribe 20T is designed for children of the age
+                  group of 5-8 years with height of 3feet 10inches, who like to
+                  ride in style
+                </li>
+                <li>
+                  Design: Tribe cycle offers a fresh look with the stylish
+                  design. The high handlebar complete styling. | Tyre size: 20
+                  inches
+                </li>
+                <li>
+                  Quality: The robust frame, highest quality components and
+                  top-notch paint quality will ensure that the bike runs for
+                  many years. More than 50 quality test ensure highest standards
+                  of performance. The bike is shipped in 85% assembled state and
+                  requires assembly on delivery.
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="buy">price</div>
+          <div className="buy">
+            <div className="centered">
+              <p style={{ fontSize: "24px" }}>₹3,999.00</p>
+              <span style={{ width: "75%", display: "block" }}>
+                FREE delivery Saturday, 23 September. Details Or fastest
+                delivery Tomorrow, 22 September. Order within 3 hrs 27 mins.
+                <br></br> Details Select delivery location
+                <br></br>
+                <br></br> In stock Sold by RetailEZ Pvt Ltd and Fulfilled by
+                Amazon. Shows what is inside. Item often ships in manufacturer
+                container to reduce packaging. If this is a gift, consider
+                shipping to a different address.
+              </span>
+              <p>Add a Protection Plan:</p>
+              <input type="checkbox"></input>
+              <label>
+                Extended Warranty by ONSITEGO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
+                ₹205.00
+              </label>
+              <br></br>
+              <input type="checkbox"></input>
+              <label>
+                Extended Warranty by ONSITEGO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for
+                ₹205.00
+              </label>
+              <br></br>
+              <br></br>
+              <br></br>
+              <span>Quantity:</span>{" "}
+              <select>
+                <option>1</option>
+                <option>1</option>
+                <option>1</option>
+              </select>
+              <button className="actions cart-btn">Add to Cart</button>
+              <button className="actions buy-btn">Buy Now</button>
+              <p style={{ color: "dodgerblue", fontSize: "12px" }}>
+                {" "}
+                Secure transaction
+              </p>
+              <input type="checkbox"></input>
+              <label>Add gift options</label>
+              <hr></hr>
+              <button className="wishlist">Add to Wishlist</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
