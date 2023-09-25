@@ -18,6 +18,9 @@ import d7 from "../../deals/d7.jpg";
 import d8 from "../../deals/d8.jpg";
 import d9 from "../../deals/d9.jpg";
 import d10 from "../../deals/d10.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { GetProducts } from "../../redux/Home/action";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const arr = [car1, car2, car3];
@@ -27,6 +30,15 @@ export default function Home() {
     setIndex((prev) => prev - 1);
     setMedia(arr[index]);
   };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(GetProducts());
+  }, []);
+
+  const products = useSelector((state) => state.data.products);
+
+  console.log(products);
   const handleRight = () => {
     setIndex((prev) => prev + 1);
     setMedia(arr[index]);
@@ -245,14 +257,21 @@ export default function Home() {
           <span>Today's Deals</span>{" "}
           <span className="see-all">See all deals</span>
           <div className="deals-carousel">
-            <div>
-              <div className="deal-cards">
-                <img src={d1} />
-              </div>
-              <p className="poff">Upto 46% off</p>
-              <span className="poff-span">Deal of the day</span>
-            </div>
-            <div>
+            {products?.map((elem) => {
+              return (
+                <>
+                  <div onClick={() => navigate(`/product/${elem._id}`)}>
+                    <div className="deal-cards">
+                      <img src={elem.images[0]} />
+                    </div>
+                    <p className="poff">Upto 46% off</p>
+                    <span className="poff-span">Deal of the day</span>
+                  </div>
+                </>
+              );
+            })}
+
+            {/* <div>
               <div className="deal-cards">
                 <img src={d2} />
               </div>
@@ -308,13 +327,13 @@ export default function Home() {
               <p className="poff">Upto 46% off</p>
               <span className="poff-span">Deal of the day</span>
             </div>
-            <div>
-              <div className="deal-cards">
+            <div> */}
+            {/* <div className="deal-cards">
                 <img src={d9} />
               </div>
               <p className="poff">Upto 46% off</p>
               <span className="poff-span">Deal of the day</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

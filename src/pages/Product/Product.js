@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../src/logo.svg";
 import cart from "../../cart.jpg";
 import Accordion from "@mui/material/Accordion";
@@ -15,13 +15,27 @@ import p3 from "../../product/p3.jpg";
 import p4 from "../../product/p4.jpg";
 import p5 from "../../product/p5.jpg";
 import guide from "../../product/guide.jpg";
+import { useLocation, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductDetails } from "../../redux/Products/action";
 export default function Product() {
   const arr = [1, 2, 3, 4];
   const [seemore, setseemore] = useState(false);
-  const [img, setImg] = useState(product);
+  const [img, setImg] = useState();
   const display = () => {
     setseemore(!seemore);
   };
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const productDetails = useSelector((state) => state.product.details);
+  useEffect(() => {
+    dispatch(getProductDetails(id));
+  }, []);
+  useEffect(() => {
+    setImg(productDetails?.productExist?.images[0]);
+  }, [productDetails]);
+  console.log(productDetails);
   return (
     <div>
       <header style={{ position: "static" }}>
@@ -47,36 +61,25 @@ export default function Product() {
         </div>
         <div className="product-details">
           <div className="img-btns">
-            <div onMouseOver={() => setImg(product)} className="thumbnail">
-              <img src={product} />
-            </div>
-
-            <div onMouseOver={() => setImg(guide)} className="thumbnail">
-              <img src={guide} />
-            </div>
-            <div onMouseOver={() => setImg(p2)} className="thumbnail">
-              <img src={p2} />
-            </div>
-            <div onMouseOver={() => setImg(p3)} className="thumbnail">
-              <img src={p3} />
-            </div>
-            <div onMouseOver={() => setImg(p4)} className="thumbnail">
-              <img src={p4} />
-            </div>
-            <div onMouseOver={() => setImg(p5)} className="thumbnail">
-              <img src={p5} />
-            </div>
+            {productDetails?.productExist?.images.map((elem) => {
+              return (
+                <>
+                  <div onMouseOver={() => setImg(elem)} className="thumbnail">
+                    <img src={elem} />
+                  </div>
+                </>
+              );
+            })}
           </div>
           <div className="product-imgs">
             <img src={img} />
           </div>
           <div className="product-desc">
             <h2>
-              Lifelong LLBC2001 20T Cycle (Yellow and Black) I Ideal for Kids
-              (5-8 Years) I Frame Size 12 | Ideal Height 3 ft 10 inch+ I Unisex
-              Cycle| 85% Assembled (Easy self-Assembly)
+              {productDetails?.productExist?.name}{" "}
+              {productDetails?.productExist?.desc}
             </h2>
-            <a href="#">Visit the Lifelong store</a>
+            <a href="#">Visit the {productDetails?.productExist?.name} store</a>
             <div style={{ display: "flex" }}>
               <p className="hover">
                 4.0{" "}
@@ -137,7 +140,10 @@ export default function Product() {
             <hr></hr>
             <p className="deal">Deal</p>
             <p className="discount">
-              -43% <span className="sp">Rs 3,999</span>{" "}
+              -43%{" "}
+              <span className="sp">
+                Rs {productDetails?.productExist?.price}
+              </span>{" "}
             </p>
             <p className="mrp">
               M.R.P <strike>Rs 6,999</strike>
