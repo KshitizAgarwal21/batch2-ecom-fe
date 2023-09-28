@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const getProductDetails = createAsyncThunk(
-  "getProducts",
+  "getProductsDetails",
 
   async (payload) => {
     console.log(payload);

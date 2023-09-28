@@ -32,11 +32,12 @@ export default function Home() {
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(GetProducts());
-  }, []);
-
   const products = useSelector((state) => state.data.products);
+  useEffect(() => {
+    if (products?.length == 0) {
+      dispatch(GetProducts());
+    }
+  }, []);
 
   console.log(products);
   const handleRight = () => {

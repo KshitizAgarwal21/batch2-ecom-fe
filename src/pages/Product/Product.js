@@ -18,15 +18,36 @@ import guide from "../../product/guide.jpg";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetails } from "../../redux/Products/action";
+import { AddToCart } from "../../redux/Cart/action";
 export default function Product() {
   const arr = [1, 2, 3, 4];
   const [seemore, setseemore] = useState(false);
   const [img, setImg] = useState();
+  const [quantity, setQuantity] = useState(1);
+  const [cartQuant, setCartQuant] = useState(0);
   const display = () => {
     setseemore(!seemore);
   };
   const dispatch = useDispatch();
   const { id } = useParams();
+  const handleChange = (e) => {
+    setQuantity(parseInt(e.target.value));
+  };
+  const addToCart = () => {
+    const payload = {
+      product_id: productDetails.productExist._id,
+      quantity: quantity,
+    };
+    dispatch(AddToCart(payload));
+    if (
+      cartMessage == "data added successfully" ||
+      cartMessage == "cart and shopping session updated successfully"
+    ) {
+      setCartQuant(quantity);
+    }
+  };
+
+  const cartMessage = useSelector((state) => state.cart.message);
 
   const productDetails = useSelector((state) => state.product.details);
   useEffect(() => {
@@ -49,7 +70,7 @@ export default function Product() {
 
         <div className="cart">
           <img src={cart} className="cart-img" />
-          <p className="overlay">1</p>
+          <p className="overlay">{cartQuant}</p>
           Cart
         </div>
       </header>
@@ -351,12 +372,14 @@ export default function Product() {
               <br></br>
               <br></br>
               <span>Quantity:</span>{" "}
-              <select>
+              <select onChange={(e) => handleChange(e)}>
                 <option>1</option>
-                <option>1</option>
-                <option>1</option>
+                <option>2</option>
+                <option>3</option>
               </select>
-              <button className="actions cart-btn">Add to Cart</button>
+              <button className="actions cart-btn" onClick={addToCart}>
+                Add to Cart
+              </button>
               <button className="actions buy-btn">Buy Now</button>
               <p style={{ color: "dodgerblue", fontSize: "12px" }}>
                 {" "}
