@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import logo from "../../../src/logo.svg";
 import cart from "../../cart.jpg";
 import product from "../../product/product.jpg";
@@ -7,12 +7,36 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../../redux/Cart/action";
+import Header from "../../Components/Header";
 export default function Cart() {
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const loading = useSelector((state) => state.cart.loading);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (cartItems.length == 0) {
+      dispatch(getCart());
+    }
+  }, []);
+  function getSubTotal() {
+    let total = 0;
+    cartItems.map((elem) => {
+      total = total + elem.prm.price * elem.quant;
+    });
+    console.log(total);
+    return total;
+  }
+
+  const subTotal = useMemo(() => {
+    return getSubTotal();
+  }, [cartItems]);
+
   return (
     <div
       style={{ background: "#efefef", height: "100vh", position: "relative" }}
     >
-      <header style={{ position: "static" }}>
+      {/* <header style={{ position: "static" }}>
         <img src={logo} className="app-logo" />
         <div style={{ color: "#fff" }}>Hello, Select your address</div>
 
@@ -26,63 +50,79 @@ export default function Cart() {
           <p className="overlay">1</p>
           Cart
         </div>
-      </header>
+      </header> */}
+      <Header />
       <div className="cart-container">
         <div className="cart-product">
           <h1>Shopping Cart</h1>
           <hr></hr>
-          <div>
-            <div className="sub-cart-prod">
+          {loading && <>Loading...</>}
+          {!loading && (
+            <>
+              {" "}
               <div>
-                <img src={product}></img>
-              </div>
-              <div className="sub-cart-details">
-                <h3>
-                  Lifelong LLBC2001 Tribe 20T Cycle (Yellow and Black) I Ideal
-                  for: Kids (5-8 Years) I Frame Size: 12" | Ideal Height : 3 ft
-                  10 inch+ I Unisex Cycle| 85% Asse
-                </h3>
-                <p className="deal">Deal</p>
-                <p className="discount">
-                  -43% <span className="sp">Rs 3,999</span>{" "}
-                </p>
-                <p className="mrp">
-                  M.R.P <strike>Rs 6,999</strike>
-                </p>
-                <span style={{ fontSize: "12px", color: "green" }}>
-                  In stock
-                </span>
-                <br></br>
-                <span style={{ fontSize: "14px", color: "gray" }}>
-                  Eligible for FREE Shipping
-                </span>
-                <br></br>
-                <input type="checkbox"></input>
-                <label style={{ fontSize: "12px" }}>This will be a gift </label>
-                <span style={{ fontSize: "12px" }}>
-                  <a href="#">Learn More</a>
-                </span>
-                <br></br>
-                <p>
-                  <b>Style Name:</b> <span>LLBC2001</span>
-                </p>
-                <div style={{ display: "flex" }}>
-                  <select>
-                    <option>Qty: 1</option>
-                  </select>
-                  <div className="cart-action">Delete</div>
-                  <div className="cart-action">Save for later</div>
-                  <div className="cart-action">See more like this</div>
-                  <div className="cart-action">Share</div>
-                </div>
-              </div>
-            </div>
-            <hr></hr>
+                {cartItems?.map((elem) => {
+                  return (
+                    <>
+                      {" "}
+                      <div className="sub-cart-prod">
+                        <div>
+                          <img src={elem.prm.images[0]}></img>
+                        </div>
+                        <div className="sub-cart-details">
+                          <h3>
+                            {elem.prm.name} {elem.prm.desc}
+                          </h3>
+                          <p className="deal">Deal</p>
+                          <p className="discount">
+                            -43% <span className="sp">Rs {elem.prm.price}</span>{" "}
+                          </p>
+                          <p className="mrp">
+                            M.R.P <strike>Rs 6,999</strike>
+                          </p>
+                          <span style={{ fontSize: "12px", color: "green" }}>
+                            In stock
+                          </span>
+                          <br></br>
+                          <span style={{ fontSize: "14px", color: "gray" }}>
+                            Eligible for FREE Shipping
+                          </span>
+                          <br></br>
+                          <input type="checkbox"></input>
+                          <label style={{ fontSize: "12px" }}>
+                            This will be a gift{" "}
+                          </label>
+                          <span style={{ fontSize: "12px" }}>
+                            <a href="#">Learn More</a>
+                          </span>
+                          <br></br>
+                          <p>
+                            <b>Style Name:</b> <span>LLBC2001</span>
+                          </p>
+                          <div style={{ display: "flex" }}>
+                            <select>
+                              <option>Qty: {elem.quant}</option>
+                            </select>
+                            <div className="cart-action">Delete</div>
+                            <div className="cart-action">Save for later</div>
+                            <div className="cart-action">
+                              See more like this
+                            </div>
+                            <div className="cart-action">Share</div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr></hr>
+                    </>
+                  );
+                })}
 
-            <h3 style={{ textAlign: "right" }}>
-              Subtotal (3 items): 11,997.00
-            </h3>
-          </div>
+                <h3 style={{ textAlign: "right" }}>
+                  Subtotal (3 items): {subTotal}
+                </h3>
+              </div>
+            </>
+          )}
         </div>
         <div style={{ width: "20%" }}>
           <div className="cart-product-pricing">

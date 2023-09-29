@@ -18,3 +18,17 @@ export const AddToCart = createAsyncThunk("addToCart", async (payload) => {
     console.log(e);
   }
 });
+
+export const getCart = createAsyncThunk("getCart", async (payload) => {
+  try {
+    const resp = await axios.get("http://localhost:8080/activity/getCart", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+
+    return resp.data;
+  } catch (e) {
+    console.log(e);
+  }
+});

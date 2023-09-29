@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AddToCart } from "./action";
+import { AddToCart, getCart } from "./action";
 const initialState = {
   message: "",
-  loading: false,
+  cartItems: [],
+  loading: true,
   error: false,
 };
 
@@ -12,7 +13,8 @@ const CartSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(AddToCart.fulfilled, (state, action) => {
-      state.message = action.payload;
+      state.cartItems = action.payload.result;
+      state.message = action.payload.msg;
       state.loading = false;
     });
     builder.addCase(AddToCart.pending, (state) => {
@@ -20,6 +22,19 @@ const CartSlice = createSlice({
     });
     builder.addCase(AddToCart.rejected, (state) => {
       state.error = true;
+      state.loading = false;
+    });
+
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.cartItems = action.payload.result;
+      state.loading = false;
+    });
+    builder.addCase(getCart.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getCart.rejected, (state) => {
+      state.error = true;
+      state.loading = false;
     });
   },
 });

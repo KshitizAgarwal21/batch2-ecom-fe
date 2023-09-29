@@ -21,6 +21,7 @@ import d10 from "../../deals/d10.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { GetProducts } from "../../redux/Home/action";
 import { useNavigate } from "react-router-dom";
+import Header from "../../Components/Header";
 
 export default function Home() {
   const arr = [car1, car2, car3];
@@ -50,7 +51,7 @@ export default function Home() {
 
   return (
     <div>
-      <header>
+      {/* <header>
         <img src={logo} className="app-logo" />
         <div style={{ color: "#fff" }}>Hello, Select your address</div>
 
@@ -64,8 +65,8 @@ export default function Home() {
           <p className="overlay">1</p>
           Cart
         </div>
-      </header>
-
+      </header> */}
+      <Header />
       <div className="carousel-container">
         <p className="nav left" onClick={handleLeft}>
           Left
