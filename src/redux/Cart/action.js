@@ -32,3 +32,20 @@ export const getCart = createAsyncThunk("getCart", async (payload) => {
     console.log(e);
   }
 });
+
+export const checkout = createAsyncThunk("checkout", async (payload) => {
+  try {
+    const resp = await axios.post(
+      "http://localhost:8080/activity/checkout",
+      payload,
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      }
+    );
+    return resp.data;
+  } catch (e) {
+    console.log(e);
+  }
+});

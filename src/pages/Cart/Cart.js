@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
-import logo from "../../../src/logo.svg";
-import cart from "../../cart.jpg";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
 import product from "../../product/product.jpg";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -8,17 +9,30 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../redux/Cart/action";
+import { getCart, checkout } from "../../redux/Cart/action";
 import Header from "../../Components/Header";
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const loading = useSelector((state) => state.cart.loading);
   const dispatch = useDispatch();
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
   useEffect(() => {
     if (cartItems.length == 0) {
       dispatch(getCart());
     }
   }, []);
+  const orderStatus = useSelector((state) => state.cart.orderStatus);
+  const buynow = () => {
+    dispatch(checkout());
+  };
+
+  useEffect(() => {
+    if (orderStatus == "order created successfully") {
+      setOpen(true);
+    }
+  }, [orderStatus]);
   function getSubTotal() {
     let total = 0;
     cartItems.map((elem) => {
@@ -27,6 +41,14 @@ export default function Cart() {
     console.log(total);
     return total;
   }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const [open, setOpen] = React.useState(false);
 
   const subTotal = useMemo(() => {
     return getSubTotal();
@@ -118,7 +140,7 @@ export default function Cart() {
                 })}
 
                 <h3 style={{ textAlign: "right" }}>
-                  Subtotal (3 items): {subTotal}
+                  Subtotal ({cartItems?.length} items): {subTotal}
                 </h3>
               </div>
             </>
@@ -136,12 +158,16 @@ export default function Cart() {
                 Details
               </span>
             </span>
-            <h3>Subtotal (1 item): 3,999.00</h3>
+            <h3>
+              Subtotal ({cartItems?.length} item): {subTotal}
+            </h3>
             <input type="checkbox"></input>
             <label style={{ fontSize: "14px" }}>
               This order contains a gift{" "}
             </label>
-            <button className="cart-buy-btn">Proceed to buy</button>
+            <button className="cart-buy-btn" onClick={buynow}>
+              Proceed to buy
+            </button>
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -209,6 +235,11 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Order Placed successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

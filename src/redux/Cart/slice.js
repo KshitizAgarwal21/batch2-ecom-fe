@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AddToCart, getCart } from "./action";
+import { AddToCart, checkout, getCart } from "./action";
 const initialState = {
   message: "",
   cartItems: [],
   loading: true,
   error: false,
+  orderStatus: "",
 };
 
 const CartSlice = createSlice({
@@ -35,6 +36,16 @@ const CartSlice = createSlice({
     builder.addCase(getCart.rejected, (state) => {
       state.error = true;
       state.loading = false;
+    });
+
+    builder.addCase(checkout.fulfilled, (state, action) => {
+      state.orderStatus = action.payload;
+    });
+    builder.addCase(checkout.pending, (state, action) => {
+      state.orderStatus = action.payload;
+    });
+    builder.addCase(checkout.rejected, (state, action) => {
+      state.orderStatus = action.payload;
     });
   },
 });
