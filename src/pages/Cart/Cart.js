@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
@@ -15,6 +15,7 @@ export default function Cart() {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const loading = useSelector((state) => state.cart.loading);
   const dispatch = useDispatch();
+  const [cartStatus, setCartStatus] = useState(false);
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -25,14 +26,21 @@ export default function Cart() {
   }, []);
   const orderStatus = useSelector((state) => state.cart.orderStatus);
   const buynow = () => {
-    dispatch(checkout());
+    dispatch(
+      checkout({
+        payload: {},
+        cb: (result) => {
+          if (result.status == 200) {
+            setOpen(true);
+            setCartStatus(!cartStatus);
+          }
+        },
+      })
+    );
   };
-
   useEffect(() => {
-    if (orderStatus == "order created successfully") {
-      setOpen(true);
-    }
-  }, [orderStatus]);
+    dispatch(getCart());
+  }, [cartStatus]);
   function getSubTotal() {
     let total = 0;
     cartItems.map((elem) => {

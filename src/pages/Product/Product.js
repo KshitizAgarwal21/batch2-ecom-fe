@@ -59,14 +59,17 @@ export default function Product() {
       product_id: productDetails.productExist._id,
       quantity: quantity,
     };
-    dispatch(AddToCart(payload));
-    if (
-      cartMessage == "data added successfully" ||
-      cartMessage == "updated shopping session as well" ||
-      cartMessage == "cart and shopping session updated successfully"
-    ) {
-      setOpen(true);
-    }
+    dispatch(
+      AddToCart({
+        payload: payload,
+        cb: (result) => {
+          console.log(result);
+          if (result.status == 200) {
+            setOpen(true);
+          }
+        },
+      })
+    );
   };
 
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -89,7 +92,7 @@ export default function Product() {
   useEffect(() => {
     setImg(productDetails?.productExist?.images[0]);
   }, [productDetails]);
-  console.log(productDetails);
+
   return (
     <div>
       {/* <header style={{ position: "static" }}>
